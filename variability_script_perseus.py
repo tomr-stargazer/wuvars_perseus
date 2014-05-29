@@ -43,12 +43,12 @@ print "old data size is ", data.shape
 
 # Actually, let's not do that.
 
-# This is experimental:
-data = data.where((data.JAPERMAG3 < 14) & ( data.JAPERMAG3 > 9.7) & (
-        data.HAPERMAG3 < 14) & ( data.HAPERMAG3 > 9.7) & (
-        data.KAPERMAG3 < 14) & ( data.KAPERMAG3 > 9.7) )
+# # This is experimental:
+# data = data.where((data.JAPERMAG3 < 14) & ( data.JAPERMAG3 > 9.7) & (
+#         data.HAPERMAG3 < 14) & ( data.HAPERMAG3 > 9.7) & (
+#         data.KAPERMAG3 < 14) & ( data.KAPERMAG3 > 9.7) )
 
-print "new data size is ", data.shape
+# print "new data size is ", data.shape
 
 # Fix the data by correcting the errors!
 
@@ -92,7 +92,7 @@ def calculate_stuff( splits = 10, start=0 ):
         # any cuts on the data.
         sp_i = sp.spreadsheet_write(data_i, lookup_i, -1, 
                                     path2+'sp%d.fits'%i, flags=256,
-                                    per=True, graded=True, rob=True,
+                                    per=False, graded=False, rob=True,
                                     colorslope=True)
         # EEEEE this is a flag to come and find this section of code
         
