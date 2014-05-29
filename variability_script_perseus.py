@@ -6,9 +6,8 @@ To edit the spreadsheet parameters, C-s "EEEEE"
 
 """
 
+import os
 import datetime
-
-import numpy as np
 
 import atpy
 
@@ -27,10 +26,10 @@ print "New feature: you can pass a number to calculate_stuff() and glue_stuff()"
 print "(such as 25, 50, 100) as a manual control on how many chunks to split"
 print "the data into. Make sure to use the same number for both functions!!"
 
-path = '/home/tom/reu/ORION/DATA/'
+path = os.path.expanduser('~/Dropbox/Bo_Tom/NGC1333/WSERV7/DATA/')
 path2= path+'spreadsheet/'
 
-data = atpy.Table('/home/tom/reu/ORION/DATA/low_maxvars_data.fits')
+data = atpy.Table('{0}full_data_errorcorrected_ce.fits'.format(path))
 #data = atpy.Table('/home/tom/reu/ORION/DATA/gosu_inbetween.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
@@ -44,9 +43,10 @@ print "old data size is ", data.shape
 
 # Actually, let's not do that.
 
-#data = data.where((data.JAPERMAG3 < 17.3) & ( data.JAPERMAG3 > 9.7) & (
-#        data.HAPERMAG3 < 16.3) & ( data.HAPERMAG3 > 9.7) & (
-#        data.KAPERMAG3 < 16.3) & ( data.KAPERMAG3 > 9.7) )
+# This is experimental:
+data = data.where((data.JAPERMAG3 < 14) & ( data.JAPERMAG3 > 9.7) & (
+        data.HAPERMAG3 < 14) & ( data.HAPERMAG3 > 9.7) & (
+        data.KAPERMAG3 < 14) & ( data.KAPERMAG3 > 9.7) )
 
 print "new data size is ", data.shape
 
@@ -64,7 +64,7 @@ print "new data size is ", data.shape
 
 def test():
     ''' Runs spread_write_test. '''
-    sp.spread_write_test (data, sp.base_lookup(data))
+    sp.spread_write_test (data, sp.base_lookup(data, sourceid_offset=44508700000000))
 
 def calculate_stuff( splits = 10, start=0 ):
     ''' 
