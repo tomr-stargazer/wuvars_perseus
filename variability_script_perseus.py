@@ -30,7 +30,9 @@ path = os.path.expanduser('~/Dropbox/Bo_Tom/NGC1333/WSERV7/DATA/')
 path2= path+'spreadsheet/'
 
 #data = atpy.Table('{0}full_data_errorcorrected_ce.fits'.format(path))
-data = atpy.Table('{0}fdece_graded_clipped0.95_scrubbed0.1_dusted0.5.fits'.format(path))
+#data = atpy.Table('{0}fdece_graded_clipped0.95_scrubbed0.1_dusted0.5.fits'.format(path))
+data = atpy.Table('{0}low_maxvars_photometry_aboveStetson0.5_fdece_gc0.95_s0.1_d0.5.fits'.format(path))
+
 #data = atpy.Table('/home/tom/reu/ORION/DATA/gosu_inbetween.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/constantstars_073112_data_errorcorrected.fits')
@@ -92,7 +94,7 @@ def calculate_stuff( splits = 10, start=0 ):
         # any cuts on the data.
         sp_i = sp.spreadsheet_write(data_i, lookup_i, -1, 
                                     path2+'sp%d.fits'%i, flags=256,
-                                    per=False, graded=False, rob=True,
+                                    per=True, graded=False, rob=True,
                                     colorslope=True)
         # EEEEE this is a flag to come and find this section of code
         
