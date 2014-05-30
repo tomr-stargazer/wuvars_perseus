@@ -10,13 +10,25 @@ import os
 
 import numpy as np
 import atpy
+import astropy.io.fits
 
 import night_cleanser
 
 path = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/WSERV7/")
+datapath = path+'DATA/'
 
-data = atpy.Table(path+"DATA/results29_8_14_53_103.fits.gz")
-data.table_name = 'NGC133'
+# This is a gross workaround because either WSA or ATpy is not handling fits files correctly.
+# So we invoke astropy to load and re-save the table data and save all our souls.
+if os.path.isfile(datapath+'fulldata.fits'):
+	os.remove(datapath+'fulldata.fits')
+predata = astropy.io.fits.open(datapath+"results29_8_14_53_103.fits.gz")
+tbdata = predata[1].data
+hdu = astropy.io.fits.BinTableHDU(tbdata)
+hdu.writeto(datapath+'fulldata.fits')
+
+#data = atpy.Table(path+"DATA/results29_8_14_53_103.fits.gz")
+data = atpy.Table(datapath+"fulldata.fits")
+data.table_name = 'NGC1333'
 
 # created using variability_script_perseus
 spreadsheet = atpy.Table(path+"DATA/spreadsheet/full_data_errorcorrected_ce_spreadsheet.fits")
@@ -60,24 +72,17 @@ cleansed_scrubbed_data = night_cleanser.selective_flag_scrubber(cleansed_data, m
 
 cleansed_scrubbed_dusted_data = night_cleanser.errorbar_duster(cleansed_scrubbed_data)
 
-comment_string = ['FITSWriter: database:WSERV7v20140528',
-	'29/05/14 08:14',
-	'SQL Query',
-	'select SOURCEID, MEANMJDOBS, s.RA, s.DEC, JMHPNT, JMHPNTERR, HMKPNT,',
-	'HMKPNTERR, JAPERMAG3, JAPERMAG3ERR, HAPERMAG3, HAPERMAG3ERR,',
-	'KAPERMAG3, KAPERMAG3ERR, JPPERRBITS, HPPERRBITS, KPPERRBITS,',
-	'MERGEDCLASS, PSTAR         from WSERV7SourceXSynopticSourceBestMatch',
-	'as b, WSERV7SynopticMergeLog as l, WSERV7SynopticSource as s  where',
-	'b.synFrameSetID=s.synFrameSetID and b.synSeqNum=s.synSeqNum and',
-	'b.synFrameSetID=l.synFrameSetID and   s.RA > 0  order by SOURCEID,',
-	'MEANMJDOBS']
+def save_cleansed_data(clobber=True):
 
-assert data.comments == comment_string
-assert cleansed_data.comments == comment_string
-assert cleansed_scrubbed_data.comments == comment_string
-assert cleansed_scrubbed_dusted_data.comments == comment_string
+	datalist = [cleansed_data, cleansed_scrubbed_data, cleansed_scrubbed_dusted_data]
+	pathlist = ['fdece_graded_clipped0.95.fits', 'fdece_graded_clipped0.95_scrubbed0.1.fits', 'fdece_graded_clipped0.95_scrubbed0.1_dusted0.5.fits']
 
-def save_cleansed_data():
-	cleansed_data.write(path+data+'fdece_graded_clipped0.95.fits')
-	cleansed_scrubbed_data.write(path+data+'fdece_graded_clipped0.95_scrubbed0.1.fits')
-	cleansed_scrubbed_dusted_data.write(path+data+'fdece_graded_clipped0.95_scrubbed0.1_dusted0.5.fits')
+	for data, path in zip(datalist,pathlist):
+
+		if os.path.isfile(datapath+path) and clobber:
+			os.remove(datapath+path)
+		data.write(datapath+path)
+
+	# cleansed_data.write(datapath+'fdece_graded_clipped0.95.fits')			
+	# cleansed_scrubbed_data.write(datapath+'fdece_graded_clipped0.95_scrubbed0.1.fits')
+	# cleansed_scrubbed_dusted_data.write(datapath+'fdece_graded_clipped0.95_scrubbed0.1_dusted0.5.fits')
