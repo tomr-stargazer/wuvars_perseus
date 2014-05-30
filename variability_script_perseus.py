@@ -29,9 +29,9 @@ print "the data into. Make sure to use the same number for both functions!!"
 path = os.path.expanduser('~/Dropbox/Bo_Tom/NGC1333/WSERV7/DATA/')
 path2= path+'spreadsheet/'
 
-data = atpy.Table('{0}full_data_errorcorrected_ce.fits'.format(path))
+#data = atpy.Table('{0}full_data_errorcorrected_ce.fits'.format(path))
+data = atpy.Table('{0}fdece_graded_clipped0.95_scrubbed0.1_dusted0.5.fits'.format(path))
 #data = atpy.Table('/home/tom/reu/ORION/DATA/gosu_inbetween.fits')
-#data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/fdece_graded_clipped0.8_scrubbed0.1_dusted0.5.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/constantstars_073112_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/full_data_errorcorrected.fits')
