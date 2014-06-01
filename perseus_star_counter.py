@@ -55,6 +55,8 @@ minimum = spread.where((spread.N_j >= 50) |
                        (spread.N_k >= 50) |
                        (spread.N_h >= 50) )
 
+q0_stars = minimum
+
 c_print( "Number of stars that meet absolute minimum considerations for valid data:" )
 c_print( "(i.e., have at least 50 recorded observations in at least one band)" )
 c_print( len(minimum) )
@@ -77,6 +79,12 @@ maxvars = sp.where( (sp.Stetson > 0.5) & (
         (sp.N_h >= 50) ) )
 c_print( "Maximum possible number of variables (Stetson > 0.5) : %d" % len(maxvars) )
 
+# append a 'preliminary ID' column to maxvars!
+preliminary_ID_column = ['p{0}'.format(x+1) for x in range(len(maxvars))] 
+
+maxvars.sort('RA')
+maxvars.add_column(name='preliminary_ID', data=preliminary_ID_column)
+
 # "True" variability criterion has two cases:
 # 1. All 3 bands are quality, and S > 1 (this is identical to CygOB7), or
 # 2. 1 or 2 bands is quality and has reduced chisq > 1, and S > 1 just in case.
@@ -85,46 +93,51 @@ c_print( "Maximum possible number of variables (Stetson > 0.5) : %d" % len(maxva
 
 # Constructing these as two separate arrays for ease of reading/editing.
 # Case 1: all 3 bands are quality; S > 1. Note "&"s uniform throughout.
-case1 = ( (sp.Stetson > 1) & (sp.pstar_median > 0.75) &
+case1 = ( (maxvars.Stetson > 1) & (maxvars.pstar_median > 0.75) &
           (
-        (sp.N_j >= 50) & (sp.N_j <= 200) &    # J band criteria
-        (sp.j_mean > 11) & (sp.j_mean < 17) & 
-        (sp.N_j_info == 0) 
+        (maxvars.N_j >= 50) & (maxvars.N_j <= 200) &    # J band criteria
+        (maxvars.j_mean > 11) & (maxvars.j_mean < 17) & 
+        (maxvars.N_j_info == 0) 
         ) &
           (
-        (sp.N_h >= 50) & (sp.N_h <= 200) &    # H band criteria
-        (sp.h_mean > 11) & (sp.h_mean < 16.7) & 
-        (sp.N_h_info == 0) 
+        (maxvars.N_h >= 50) & (maxvars.N_h <= 200) &    # H band criteria
+        (maxvars.h_mean > 11) & (maxvars.h_mean < 16.7) & 
+        (maxvars.N_h_info == 0) 
         ) &
           (
-        (sp.N_k >= 50) & (sp.N_k <= 200) &    # K band criteria
-        (sp.k_mean > 11) & (sp.k_mean < 16) & 
-        (sp.N_k_info == 0)
+        (maxvars.N_k >= 50) & (maxvars.N_k <= 200) &    # K band criteria
+        (maxvars.k_mean > 11) & (maxvars.k_mean < 16) & 
+        (maxvars.N_k_info == 0)
         ) )
 
 # Case 2: at least one band quality and rchi^2 > 1; S > 1. Note mixed "&"s 
 # and "|"s, as well as another layer of parentheses around the complex of "|"
 # criteria.
-case2 = ( ((sp.Stetson > 1) & (sp.pstar_median > 0.75)) & (
+case2 = ( ((maxvars.Stetson > 1) & (maxvars.pstar_median > 0.75)) & (
           (
-        (sp.N_j >= 50) & (sp.N_j <= 200) &    # J band criteria
-        (sp.j_mean > 11) & (sp.j_mean < 17) & 
-        (sp.N_j_info == 0) & (sp.j_rchi2 > 1) 
+        (maxvars.N_j >= 50) & (maxvars.N_j <= 200) &    # J band criteria
+        (maxvars.j_mean > 11) & (maxvars.j_mean < 17) & 
+        (maxvars.N_j_info == 0) & (maxvars.j_rchi2 > 1) 
         ) |
           (
-        (sp.N_h >= 50) & (sp.N_h <= 200) &    # H band criteria
-        (sp.h_mean > 11) & (sp.h_mean < 16.7) & 
-        (sp.N_h_info == 0) & (sp.h_rchi2 > 1) 
+        (maxvars.N_h >= 50) & (maxvars.N_h <= 200) &    # H band criteria
+        (maxvars.h_mean > 11) & (maxvars.h_mean < 16.7) & 
+        (maxvars.N_h_info == 0) & (maxvars.h_rchi2 > 1) 
         ) |
           (
-        (sp.N_k >= 50) & (sp.N_k <= 200) &    # K band criteria
-        (sp.k_mean > 11) & (sp.k_mean < 16) & 
-        (sp.N_k_info == 0) & (sp.k_rchi2 > 1) 
+        (maxvars.N_k >= 50) & (maxvars.N_k <= 200) &    # K band criteria
+        (maxvars.k_mean > 11) & (maxvars.k_mean < 16) & 
+        (maxvars.N_k_info == 0) & (maxvars.k_rchi2 > 1) 
         ) ) )
 
-autovars_true = sp.where( case1 | case2 )
+autovars_true = maxvars.where( case1 | case2 )
 
-autovars_strict = sp.where( case1 )
+autovars_strict = maxvars.where( case1 )
+
+q2_variables = autovars_strict
+q1_variables = autovars_true.where(~np.in1d(autovars_true.SOURCEID, q2_variables.SOURCEID))
+assert q1_variables.SOURCEID[0] not in q2_variables.SOURCEID
+assert q2_variables.SOURCEID[0] not in q1_variables.SOURCEID
 
 
 # Now, to count how many stars have quality that meets "autovars_true".
@@ -168,8 +181,13 @@ cand_case2 = ( (sp.pstar_median > 0.75) & (
 
 
 autocan_true = sp.where( cand_case1 | cand_case2 )
-
 autocan_strict = sp.where( cand_case1 )
+
+q2_stars = autocan_strict
+q1_stars = autocan_true.where(~np.in1d(autocan_true.SOURCEID, q2_stars.SOURCEID))
+assert q1_stars.SOURCEID[0] not in q2_stars.SOURCEID
+assert q2_stars.SOURCEID[0] not in q1_stars.SOURCEID
+
 
 c_print( "Number of stars automatically classed as variables: %d" % len(autovars_true) )
 c_print( "Number of stars that have the data quality for auto-classification: %d" % len(autocan_true) )
@@ -197,6 +215,7 @@ c_print( "    %.2f%s, drawn from a looser sample." % (len(autovars_true)/len(aut
 periodics = ps.best_long_period(
     ps.long_periodic_selector(maxvars_spread_per, min_period=2, max_period=75), 
     min_period=2, max_period=75)
+periodics.sort('RA')
 
 maxvars_periodics = maxvars.where( 
     np.in1d(maxvars.SOURCEID, periodics.SOURCEID) )
@@ -232,12 +251,15 @@ c_print( "    %.2f%s, drawn from a looser sample." % (len(autovars_true_periodic
 maxvars_periods = periodics.where( 
     np.in1d(periodics.SOURCEID, maxvars_periodics.SOURCEID))
 
-# etc
-autovars_true_periods = periodics.where( 
-    np.in1d(periodics.SOURCEID, autovars_true_periodics.SOURCEID))
+assert (maxvars_periods.RA == maxvars_periodics.RA).all()
+maxvars_periods.add_column(name='preliminary_ID', data=maxvars_periodics.preliminary_ID)
 
-autovars_strict_periods = periodics.where( 
-    np.in1d(periodics.SOURCEID, autovars_strict_periodics.SOURCEID))
+# etc
+autovars_true_periods = maxvars_periodics.where( 
+    np.in1d(maxvars_periodics.SOURCEID, autovars_true_periodics.SOURCEID))
+
+autovars_strict_periods = maxvars_periodics.where( 
+    np.in1d(maxvars_periodics.SOURCEID, autovars_strict_periodics.SOURCEID))
 
 #print "hey look i'm here"
 
@@ -250,3 +272,10 @@ autovars_true_nonpers = autovars_true.where(
 
 autovars_strict_nonpers = autovars_strict.where(
     ~np.in1d(autovars_strict.SOURCEID, autovars_strict_periodics.SOURCEID))
+
+q1_vars_periods = maxvars_periodics.where( 
+    np.in1d(maxvars_periodics.SOURCEID, q1_variables.SOURCEID))
+
+q2_vars_periods = maxvars_periodics.where( 
+    np.in1d(maxvars_periodics.SOURCEID, q2_variables.SOURCEID))
+assert (q2_vars_periods.preliminary_ID == autovars_strict_periodics.preliminary_ID).all()
