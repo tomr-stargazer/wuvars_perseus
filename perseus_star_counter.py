@@ -25,7 +25,7 @@ import numpy as np
 
 import atpy
 
-import long_periods as ps
+import periodic_selector as ps
 
 def c_print(str):
     if __name__ == '__main__':
