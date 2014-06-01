@@ -27,7 +27,8 @@ def generate_periodic_lightcurves(spreadsheet, path, name_column='preliminary_ID
 		path += '/'
 
 	# generate stardatas
-	sdlist = [plot4.StarData(photometry_data, x, date_offset=56141, name='{0}: {1}'.format(y,x)) for y, x in zip(spreadsheet[name_column], spreadsheet.SOURCEID)]
+	relevant_data = photometry_data.where(np.in1d(photometry_data.SOURCEID, spreadsheet.SOURCEID))
+	sdlist = [plot4.StarData(relevant_data, x, date_offset=56141, name='{0}: {1}'.format(y,x)) for y, x in zip(spreadsheet[name_column], spreadsheet.SOURCEID)]
 
 	for sdx, period in zip(sdlist, spreadsheet.best_period):
 		fig = plot4.lc_and_phase_and_colors(sdx, period=period)
@@ -47,7 +48,8 @@ def generate_nonperiodic_lightcurves(spreadsheet, path, name_column='preliminary
 	if not path.endswith('/'):
 		path += '/'
 
-	sdlist = [plot4.StarData(photometry_data, x, date_offset=56141, name='{0}: {1}'.format(y,x)) for y, x in zip(spreadsheet[name_column], spreadsheet.SOURCEID)]
+	relevant_data = photometry_data.where(np.in1d(photometry_data.SOURCEID, spreadsheet.SOURCEID))
+	sdlist = [plot4.StarData(relevant_data, x, date_offset=56141, name='{0}: {1}'.format(y,x)) for y, x in zip(spreadsheet[name_column], spreadsheet.SOURCEID)]
 
 	for sdx in sdlist:
 	    fig = plot4.basic_lc(sdx)
