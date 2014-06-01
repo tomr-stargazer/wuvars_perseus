@@ -273,9 +273,28 @@ autovars_true_nonpers = autovars_true.where(
 autovars_strict_nonpers = autovars_strict.where(
     ~np.in1d(autovars_strict.SOURCEID, autovars_strict_periodics.SOURCEID))
 
-q1_vars_periods = maxvars_periodics.where( 
-    np.in1d(maxvars_periodics.SOURCEID, q1_variables.SOURCEID))
+q1_vars_periods = maxvars_periods.where( 
+    np.in1d(maxvars_periods.SOURCEID, q1_variables.SOURCEID))
 
-q2_vars_periods = maxvars_periodics.where( 
-    np.in1d(maxvars_periodics.SOURCEID, q2_variables.SOURCEID))
+q2_vars_periods = maxvars_periods.where( 
+    np.in1d(maxvars_periods.SOURCEID, q2_variables.SOURCEID))
+
 assert (q2_vars_periods.preliminary_ID == autovars_strict_periodics.preliminary_ID).all()
+
+q2_vars_nonpers = q2_variables.where(
+    ~np.in1d(q2_variables.SOURCEID, q2_vars_periods.SOURCEID))
+q1_vars_nonpers = q1_variables.where(
+    ~np.in1d(q1_variables.SOURCEID, q1_vars_periods.SOURCEID))
+
+hi_subjectives = subjectives.where(subjectives.Stetson > 1)
+hi_subj_periods = maxvars_periods.where(np.in1d(maxvars_periods.SOURCEID, hi_subjectives.SOURCEID))
+
+low_subjectives = subjectives.where(subjectives.Stetson <= 1)
+low_subj_periods = maxvars_periods.where(np.in1d(maxvars_periods.SOURCEID, low_subjectives.SOURCEID))
+
+hi_subj_nonpers = hi_subjectives.where(
+    ~np.in1d(hi_subjectives.SOURCEID, hi_subj_periods.SOURCEID))
+low_subj_nonpers = low_subjectives.where(
+    ~np.in1d(low_subjectives.SOURCEID, low_subj_periods.SOURCEID))
+
+
