@@ -13,7 +13,8 @@ from perseus_star_counter import *
 import plot4
 
 dropbox_bo_data = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/WSERV7/DATA/")
-photometry_data = atpy.Table('{0}fdece_graded_clipped0.95_scrubbed0.1_dusted0.5.fits'.format(dropbox_bo_data))
+photometry_data = atpy.Table('{0}low_maxvars_photometry_aboveStetson0.5_fdece_gc0.95_s0.1_d0.5.fits'.format(dropbox_bo_data))
+
 
 # So basically we are relying on the output of perseus_star_counter and saving lightcurves and stuff.
 
