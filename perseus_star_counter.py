@@ -95,17 +95,17 @@ maxvars.add_column(name='preliminary_ID', data=preliminary_ID_column)
 # Case 1: all 3 bands are quality; S > 1. Note "&"s uniform throughout.
 case1 = ( (maxvars.Stetson > 1) & (maxvars.pstar_median > 0.75) &
           (
-        (maxvars.N_j >= 50) & (maxvars.N_j <= 200) &    # J band criteria
+        (maxvars.N_j >= 50) & (maxvars.N_j <= 135) &    # J band criteria
         (maxvars.j_mean > 11) & (maxvars.j_mean < 17) & 
         (maxvars.N_j_info == 0) 
         ) &
           (
-        (maxvars.N_h >= 50) & (maxvars.N_h <= 200) &    # H band criteria
+        (maxvars.N_h >= 50) & (maxvars.N_h <= 130) &    # H band criteria
         (maxvars.h_mean > 11) & (maxvars.h_mean < 16.7) & 
         (maxvars.N_h_info == 0) 
         ) &
           (
-        (maxvars.N_k >= 50) & (maxvars.N_k <= 200) &    # K band criteria
+        (maxvars.N_k >= 50) & (maxvars.N_k <= 150) &    # K band criteria
         (maxvars.k_mean > 11) & (maxvars.k_mean < 16) & 
         (maxvars.N_k_info == 0)
         ) )
@@ -115,17 +115,17 @@ case1 = ( (maxvars.Stetson > 1) & (maxvars.pstar_median > 0.75) &
 # criteria.
 case2 = ( ((maxvars.Stetson > 1) & (maxvars.pstar_median > 0.75)) & (
           (
-        (maxvars.N_j >= 50) & (maxvars.N_j <= 200) &    # J band criteria
+        (maxvars.N_j >= 50) & (maxvars.N_j <= 135) &    # J band criteria
         (maxvars.j_mean > 11) & (maxvars.j_mean < 17) & 
         (maxvars.N_j_info == 0) & (maxvars.j_rchi2 > 1) 
         ) |
           (
-        (maxvars.N_h >= 50) & (maxvars.N_h <= 200) &    # H band criteria
+        (maxvars.N_h >= 50) & (maxvars.N_h <= 130) &    # H band criteria
         (maxvars.h_mean > 11) & (maxvars.h_mean < 16.7) & 
         (maxvars.N_h_info == 0) & (maxvars.h_rchi2 > 1) 
         ) |
           (
-        (maxvars.N_k >= 50) & (maxvars.N_k <= 200) &    # K band criteria
+        (maxvars.N_k >= 50) & (maxvars.N_k <= 150) &    # K band criteria
         (maxvars.k_mean > 11) & (maxvars.k_mean < 16) & 
         (maxvars.N_k_info == 0) & (maxvars.k_rchi2 > 1) 
         ) ) )
@@ -145,17 +145,17 @@ assert q2_variables.SOURCEID[0] not in q1_variables.SOURCEID
 # Constructing these as two separate arrays for ease of reading/editing.
 # Case 1: all 3 bands are quality. Note "&"s uniform throughout.
 cand_case1 = ( (sp.pstar_median > 0.75) & ( 
-        (sp.N_j >= 50) & (sp.N_j <= 200) &    # J band criteria
+        (sp.N_j >= 50) & (sp.N_j <= 135) &    # J band criteria
         (sp.j_mean > 11) & (sp.j_mean < 17) & 
         (sp.N_j_info == 0) 
         ) &
           (
-        (sp.N_h >= 50) & (sp.N_h <= 200) &    # H band criteria
+        (sp.N_h >= 50) & (sp.N_h <= 130) &    # H band criteria
         (sp.h_mean > 11) & (sp.h_mean < 16.7) & 
         (sp.N_h_info == 0) 
         ) &
           (
-        (sp.N_k >= 50) & (sp.N_k <= 200) &    # K band criteria
+        (sp.N_k >= 50) & (sp.N_k <= 150) &    # K band criteria
         (sp.k_mean > 11) & (sp.k_mean < 16) & 
         (sp.N_k_info == 0)
         ) )
@@ -164,17 +164,17 @@ cand_case1 = ( (sp.pstar_median > 0.75) & (
 # as well as another layer of parentheses around the complex of "|" criteria.
 cand_case2 = ( (sp.pstar_median > 0.75) & (
     (
-        (sp.N_j >= 50) & (sp.N_j <= 200) &    # J band criteria
+        (sp.N_j >= 50) & (sp.N_j <= 135) &    # J band criteria
         (sp.j_mean > 11) & (sp.j_mean < 17) & 
         (sp.N_j_info == 0) 
         ) |
     (
-        (sp.N_h >= 50) & (sp.N_h <= 200) &    # H band criteria
+        (sp.N_h >= 50) & (sp.N_h <= 130) &    # H band criteria
         (sp.h_mean > 11) & (sp.h_mean < 16.7) & 
         (sp.N_h_info == 0) 
         ) |
     (
-        (sp.N_k >= 50) & (sp.N_k <= 200) &    # K band criteria
+        (sp.N_k >= 50) & (sp.N_k <= 150) &    # K band criteria
         (sp.k_mean > 11) & (sp.k_mean < 16) & 
         (sp.N_k_info == 0) 
         ) ) )
