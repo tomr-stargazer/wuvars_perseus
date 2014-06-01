@@ -298,3 +298,6 @@ low_subj_nonpers = low_subjectives.where(
     ~np.in1d(low_subjectives.SOURCEID, low_subj_periods.SOURCEID))
 
 
+assert len(maxvars) == len(q2_vars_periods) + len(q2_vars_nonpers) + len(q1_vars_periods) + len(q1_vars_nonpers) + len(subjectives)
+assert len(subjectives) == len(hi_subj_periods) + len(hi_subj_nonpers) + len(low_subj_periods) + len(low_subj_nonpers)
+
