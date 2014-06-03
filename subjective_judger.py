@@ -266,3 +266,57 @@ low_subj_nonpers_keepers = [
 confirmed_low_subj_nonpers = low_subj_nonpers.where(np.in1d(low_subj_nonpers.preliminary_ID, np.array(low_subj_nonpers_keepers)))
 
 assert len(confirmed_low_subj_nonpers) == len(low_subj_nonpers_keepers)
+
+# Now let's glue some things together
+
+confirmed_subj_nonpers = confirmed_hi_subj_nonpers.where(confirmed_hi_subj_nonpers.RA > 0)
+confirmed_subj_nonpers.append(confirmed_low_subj_nonpers)
+
+confirmed_subj_periods = confirmed_hi_subj_periods.where(confirmed_hi_subj_periods.RA > 0)
+confirmed_subj_periods.append(confirmed_low_subj_periods)
+
+q0_variables = maxvars.where(np.in1d(maxvars.SOURCEID, confirmed_subj_nonpers.SOURCEID) | 
+	                         np.in1d(maxvars.SOURCEID, confirmed_subj_periods.SOURCEID) )
+
+allvars = q2_variables.where(q2_variables.RA > 0)
+allvars.append(q1_variables)
+allvars.append(q0_variables)
+
+# append a 'temporary ID' column to allvars!
+temporary_ID_column = ['t{0}'.format(x+1) for x in range(len(allvars))] 
+
+allvars.sort('RA')
+allvars.add_column(name='temporary_ID', data=temporary_ID_column)
+
+# Repeating much of the logic from before
+allvars_periodics = allvars.where( 
+    np.in1d(allvars.SOURCEID, periodics.SOURCEID) )
+
+allvars_periods = periodics.where( 
+    np.in1d(periodics.SOURCEID, allvars_periodics.SOURCEID))
+
+assert (allvars_periods.RA == allvars_periodics.RA).all()
+allvars_periods.add_column(name='temporary_ID', data=allvars_periodics.temporary_ID)
+
+# Update the columns in these periodic guys
+q1_vars_periods = allvars_periods.where( 
+    np.in1d(allvars_periods.SOURCEID, q1_variables.SOURCEID))
+
+q2_vars_periods = allvars_periods.where( 
+    np.in1d(allvars_periods.SOURCEID, q2_variables.SOURCEID))
+
+q0_vars_periods = allvars_periods.where( 
+    np.in1d(allvars_periods.SOURCEID, q0_variables.SOURCEID))
+
+
+q1_vars_nonpers = allvars.where(
+	np.in1d(allvars.SOURCEID, q1_vars_nonpers.SOURCEID))
+
+q2_vars_nonpers = allvars.where(
+	np.in1d(allvars.SOURCEID, q2_vars_nonpers.SOURCEID))
+
+q0_vars_nonpers = q0_variables.where(
+    ~np.in1d(q0_variables.SOURCEID, q0_vars_periods.SOURCEID))
+q0_vars_nonpers = allvars.where(
+    np.in1d(allvars.SOURCEID, q0_vars_nonpers.SOURCEID))
+

@@ -9,6 +9,7 @@ import os
 import matplotlib.pyplot as plt
 
 from perseus_star_counter import *
+from subjective_judger import *
 
 import plot4
 
@@ -86,6 +87,27 @@ def generate_all_lightcurves(test=False):
 	for spread, path in zip(nonperiodic_spreadsheets, nonperiodic_paths):
 
 		generate_nonperiodic_lightcurves(spread, path, test=test)
+
+	return None
+
+def generate_confirmed_lightcurves(test=False):
+
+	# periodics
+	periodic_spreadsheets = [q2_vars_periods, q1_vars_periods, q0_vars_periods]
+	periodic_paths = ['q2/periodic', 'q1/periodic', 'q0/periodic']
+	periodic_paths = ['{0}{1}'.format(lightcurve_path, x) for x in periodic_paths]
+
+	for spread, path in zip(periodic_spreadsheets, periodic_paths):
+
+		generate_periodic_lightcurves(spread, path, test=test, name_column='temporary_ID')
+
+	nonperiodic_spreadsheets = [q2_vars_nonpers, q1_vars_nonpers, q0_vars_nonpers]
+	nonperiodic_paths = ['q2/nonperiodic', 'q1/nonperiodic', 'q0/nonperiodic']
+	nonperiodic_paths = ['{0}{1}'.format(lightcurve_path, x) for x in nonperiodic_paths]
+
+	for spread, path in zip(nonperiodic_spreadsheets, nonperiodic_paths):
+
+		generate_nonperiodic_lightcurves(spread, path, test=test, name_column='temporary_ID')
 
 	return None
 
