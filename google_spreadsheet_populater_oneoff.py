@@ -11,6 +11,7 @@ from tablemate_script_perseus import vars_match, merge_scholz_columns
 import astrolib.coords as coords
 
 from perseus_star_counter import *
+from subjective_judger import *
 
 # Take in a table of some kind
 
@@ -20,15 +21,17 @@ def output_tab_delineated_spreadsheet(spreadsheet, print_column_headers=False):
 
 	column_headers = [key for key in match_table.columns.keys if 'index' not in key]
 
+	primary_header = column_headers[0]	
+
 	column_headers.insert(1, 'DEC')
 	column_headers.insert(1, 'RA')
 
 	row_strings = []	
-	
+
 	if print_column_headers:
 		row_strings.append('\t'.join(column_headers))
 
-	spreadsheet_matched = match_table.where(np.in1d(match_table.WUVARS_2014_preliminary_ID, spreadsheet.preliminary_ID))
+	spreadsheet_matched = match_table.where(np.in1d(match_table[primary_header], spreadsheet[primary_header.lstrip('WUVARS_2014_')]))
 
 	RA_array = []
 	DEC_array = []
@@ -38,8 +41,6 @@ def output_tab_delineated_spreadsheet(spreadsheet, print_column_headers=False):
 		ra_s, de_s = pp.hmsdms().split(' ')
 		RA_array.append(ra_s)
 		DEC_array.append(' '+de_s)
-
-	primary_header = column_headers[0]
 
 	for i in range(len(spreadsheet_matched)):
 
