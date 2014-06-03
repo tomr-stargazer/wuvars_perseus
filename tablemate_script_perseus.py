@@ -32,7 +32,7 @@ WUVARS_maxvars_p = TableParameters(
     full_name = "'Master spreadsheet for 647 candidate variables', from 'Near-Infrared Variables in NGC1333', Reipurth & Rice.",
     ra_cols = ['RA'], dec_cols=['DEC'],
     radec_fmt = 'decimal-radians',
-    name_col = 'SOURCEID')
+    name_col = 'preliminary_ID')
 
 Twomass = TableParameters(
     data = dpath+"2MASS_PSC_boxsearch_1degree_NGC1333.tbl",
@@ -59,51 +59,74 @@ tables.append(Gutermuth_2008)
 #    tid=1 : J/ApJ/744/6/tablen1
 #    tid=2 : J/ApJ/744/6/table4
 Scholz_2009 = TableParameters(
-    data = atpy.Table(dpath+'Scholz_vizier_votable.vot', tid=2),
+    data = atpy.Table(dpath+'Scholz_vizier_votable.vot', tid=2, verbose=False),
     alias = "Scho09",
     full_name = "'Previously confirmed very low mass members in NGC 1333, Table 4 from 2012ApJ...744....6S'",
     ra_cols = ['_RAJ2000'], dec_cols = ['_DEJ2000'],
     radec_fmt = 'decimal_degrees',
     name_col = 'ID')
+tables.append(Scholz_2009)
 Scholz_2012a = TableParameters(
-    data = atpy.Table(dpath+'Scholz_vizier_votable.vot', tid=0),
+    data = atpy.Table(dpath+'Scholz_vizier_votable.vot', tid=0, verbose=False),
     alias = "Scho12a",
     full_name = "New very low mass members in NGC 1333, Table 2 from 2012ApJ...744....6S",
     ra_cols = ['_RAJ2000'], dec_cols = ['_DEJ2000'],
     radec_fmt = 'decimal_degrees',
     name_col = 'SONYC')
+tables.append(Scholz_2012a)
 Scholz_2012b = TableParameters(
-    data = atpy.Table(dpath+'Scholz_vizier_votable.vot', tid=1),
+    data = atpy.Table(dpath+'Scholz_vizier_votable.vot', tid=1, verbose=False),
     alias = "Scho12b",
     full_name = "New very low mass members of NGC 1333, Table 1 from 2012ApJ...756...24S",
     ra_cols = ['_RAJ2000'], dec_cols = ['_DEJ2000'],
     radec_fmt = 'decimal_degrees',
     name_col = 'SONYC')
+tables.append(Scholz_2012b)
 
+Wilking_2004 = TableParameters(
+    data = dpath+'Wilking2004_vizier_votable.vot',
+    alias = 'MBO',
+    full_name = "'Table 1: Photometry of northern NGC 1333 cluster' from 'NGC 1333 low-mass stars infrared photometry (Wilking+, 2004)'",
+    ra_cols = ['_RAJ2000'], dec_cols = ['_DEJ2000'],
+    radec_fmt = 'decimal_degrees',
+    name_col = 'MBO'
+    )
+tables.append(Wilking_2004)
 
+Getman_2002 = TableParameters(
+    data = atpy.Table(dpath+"Getman2002_vizier_votable.vot", tid=0, verbose=False),
+    alias = 'ACIS',
+    full_name = "'Table 1: ACIS NGC 1333 sources and stellar identifications', from 'Young stellar objects in the NGC 1333 (Getman+, 2002)'",
+    ra_cols = ['_RAJ2000'], dec_cols = ['_DEJ2000'],
+    radec_fmt = 'decimal_degrees',
+    name_col = '__GFT2002_',
+    max_match = 2.0)
+tables.append(Getman_2002)
+
+Aspin_1994 = TableParameters(
+    data = dpath+"Aspin1994.fits",
+    alias = 'ASR',
+    full_name = "'Sources in NGC1333-S (tables 1, 2, 3 and 5 of paper)' from 'Near-IR imaging photometry of NGC 1333 (Aspin+ 1994)'",
+    ra_cols = ['_RAJ2000'], dec_cols = ['_DEJ2000'],
+    radec_fmt = 'decimal_degrees',
+    name_col = 'ASR')
+tables.append(Aspin_1994)
+
+Lada_1996 = TableParameters(
+    data = dpath+"LadaAL.fits",
+    alias = 'LAL',
+    full_name = "'Catalogue' from 'JHK photometry of NGC1333 (Lada+, 1996)'",
+    ra_cols = ['_RAJ2000'], dec_cols = ['_DEJ2000'],
+    radec_fmt = 'decimal_degrees',
+    name_col = '__LAL96_'
+    )
+tables.append(Lada_1996)
     
 # Here's our first function, that we'll use just to get things rolling
 def test():
-    wov = tablemate_core.osc.autovars_strict
-
-    wov_avs = TableParameters(
-        #data
-        wov,
-        #alias
-        "WFCAM Orion",
-        #full name
-        "Strict automatic variables found in the WFCAM Orion monitoring survey. From 'High Amplitude and Periodic Near-Infrared Variables in the Orion Nebula Cluster' by Rice, Thomas S.; Reipurth, Bo; et al.",
-        #ra_cols, dec_cols
-        ['RA'], ['DEC'],
-        #radec_fmt
-        'decimal radians',
-        #name_col
-        'SOURCEID')
 
 
-    return tablemate_core.tablemater(wov_avs, [
-            Herbst2002, YSOVAR_NoExcess, YSOVAR_YSOs, DaRio_2010,
-            DaRio_2009, Carpenter_2001, COUP_Getman2005, eso_ha])
+    return tablemate_core.tablemater(WUVARS_maxvars_p, [Twomass, Gutermuth_2008, Scholz_2009, Wilking_2004, Getman_2002])
             
 
 
@@ -114,8 +137,5 @@ def vars_match():
     Takes about 15 seconds (2/13/13).
     """
 
-    return tablemate_core.tablemater( Rice_2013_vars, tables)
+    return tablemate_core.tablemater( WUVARS_maxvars_p, tables)
 
-def UKvars_match():
-    
-    return tablemate_core.tablemater( Rice_UKvars, tables)
