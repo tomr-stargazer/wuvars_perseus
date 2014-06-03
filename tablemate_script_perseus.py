@@ -34,6 +34,15 @@ WUVARS_maxvars_p = TableParameters(
     radec_fmt = 'decimal-radians',
     name_col = 'preliminary_ID')
 
+WUVARS_allvars_t = TableParameters(
+    data = dpath+"allvars_spread_with_temporary_IDs.fits",
+    alias= "WUVARS_2014_temporary",
+    full_name = "'Master spreadsheet for 165 likely variables', from 'Near-Infrared Variables in NGC1333', Reipurth & Rice.",
+    ra_cols = ['RA'], dec_cols=['DEC'],
+    radec_fmt = 'decimal-radians',
+    name_col = 'temporary_ID')
+
+
 Twomass = TableParameters(
     data = dpath+"2MASS_PSC_boxsearch_1degree_NGC1333.tbl",
     alias = "2MASS_PSC",
@@ -130,14 +139,14 @@ def test():
             
 
 
-def vars_match():
+def vars_match(primary_table=WUVARS_allvars_t):
     """ 
     A function that matches our variables table to all the other tables!
 
     Takes about 15 seconds (2/13/13).
     """
 
-    return tablemate_core.tablemater( WUVARS_maxvars_p, tables)
+    return tablemate_core.tablemater( primary_table, tables)
 
 def merge_scholz_columns(matched_table):
     """
