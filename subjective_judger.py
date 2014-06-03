@@ -292,8 +292,8 @@ allvars.add_column(name='temporary_ID', data=temporary_ID_column)
 allvars_periodics = allvars.where( 
     np.in1d(allvars.SOURCEID, periodics.SOURCEID) )
 
-allvars_periods = periodics.where( 
-    np.in1d(periodics.SOURCEID, allvars_periodics.SOURCEID))
+allvars_periods = maxvars_periods.where( 
+    np.in1d(maxvars_periods.SOURCEID, allvars_periodics.SOURCEID))
 
 assert (allvars_periods.RA == allvars_periodics.RA).all()
 allvars_periods.add_column(name='temporary_ID', data=allvars_periodics.temporary_ID)
@@ -319,4 +319,10 @@ q0_vars_nonpers = q0_variables.where(
     ~np.in1d(q0_variables.SOURCEID, q0_vars_periods.SOURCEID))
 q0_vars_nonpers = allvars.where(
     np.in1d(allvars.SOURCEID, q0_vars_nonpers.SOURCEID))
+
+def save_allvars_to_file():
+
+    dropbox_bo_aux = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/WSERV7/aux_catalogs/")
+    allvars.write(dropbox_bo_aux+"allvars_spread_with_temporary_IDs.fits")
+
 
