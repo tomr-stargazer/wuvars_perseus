@@ -87,7 +87,7 @@ hi_subj_nonpers_comments = [
 	'junk',
 	'saturated',
 	'messy long term trend',
-	'missing',
+	'junk',
 	'irregular',
 	'junk',
 	'junk',
