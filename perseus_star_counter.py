@@ -301,3 +301,8 @@ low_subj_nonpers = low_subjectives.where(
 assert len(maxvars) == len(q2_vars_periods) + len(q2_vars_nonpers) + len(q1_vars_periods) + len(q1_vars_nonpers) + len(subjectives)
 assert len(subjectives) == len(hi_subj_periods) + len(hi_subj_nonpers) + len(low_subj_periods) + len(low_subj_nonpers)
 
+def save_maxvars_to_file():
+
+    dropbox_bo_aux = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/WSERV7/aux_catalogs/")
+    maxvars.write(dropbox_bo_aux+"maxvars_spread_with_preliminary_IDs.fits")
+
