@@ -139,3 +139,27 @@ def vars_match():
 
     return tablemate_core.tablemater( WUVARS_maxvars_p, tables)
 
+def merge_scholz_columns(matched_table):
+    """
+    Takes in a table with 3 Scholz columns and merges them into one Scholz column.
+
+    """
+
+    pk = matched_table.columns.keys[0]
+    matched_table_copy = matched_table.where(matched_table[pk] == matched_table[pk])
+
+    scholz_a = matched_table['Scho09_ID']
+    scholz_b = matched_table['Scho12a_ID']
+    scholz_c = matched_table['Scho12b_ID']    
+
+    for i in range(len(scholz_a)):
+        if scholz_a[i] == '-1' and scholz_b[i] != '-1':
+            scholz_a[i] = scholz_b[i]
+        elif scholz_a[i] == '-1' and scholz_c[i] != '-1':
+            scholz_a[i] = scholz_c[i]
+
+    matched_table_copy.remove_columns(['Scho09_ID', 'Scho12a_ID', 'Scho12b_ID'])
+    matched_table_copy.add_column(name='Scholz_ID', data=scholz_a, after='SpYSO_index')
+
+    return matched_table_copy
+
