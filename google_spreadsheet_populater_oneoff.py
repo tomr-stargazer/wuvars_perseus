@@ -23,11 +23,10 @@ def output_tab_delineated_spreadsheet(spreadsheet, print_column_headers=False):
 	column_headers.insert(1, 'DEC')
 	column_headers.insert(1, 'RA')
 
-	return_string = ''
+	row_strings = []	
+	
 	if print_column_headers:
-		for header in column_headers:
-			return_string += '{0} \t'.format(header),
-		return_string += '\n'
+		row_strings.append('\t'.join(column_headers))
 
 	spreadsheet_matched = match_table.where(np.in1d(match_table.WUVARS_2014_preliminary_ID, spreadsheet.preliminary_ID))
 
@@ -42,9 +41,6 @@ def output_tab_delineated_spreadsheet(spreadsheet, print_column_headers=False):
 
 	primary_header = column_headers[0]
 
-
-	row_strings = []
-
 	for i in range(len(spreadsheet_matched)):
 
 		row_list = [str(spreadsheet_matched[primary_header][i])]
@@ -53,7 +49,7 @@ def output_tab_delineated_spreadsheet(spreadsheet, print_column_headers=False):
 
 		row_strings.append('\t'.join(row_list))
 
-	return_string += '\n'.join(row_strings)
+	return_string = '\n'.join(row_strings)
 
 	return return_string
 
