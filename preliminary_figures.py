@@ -4,24 +4,22 @@ Some preliminary figures to make from the NGC1333 dataset.
 """
 
 from __future__ import division
+import os
 
 import numpy as np
 import matplotlib.pyplot as plt
 
 import atpy
 
-spread = atpy.Table('full_data_errorcorrected_ce_spreadsheet.fits')
-minimum = spread.where((spread.N_j >= 50) |
-                       (spread.N_k >= 50) |
-                       (spread.N_h >= 50) )
+dropbox_bo_data = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/WSERV7/DATA/")
+dropbox_bo_spread = dropbox_bo_data+'spreadsheet/'
 
-maxvars = spread.where( (spread.Stetson > 1) & (
-        (spread.N_j >= 50) |
-        (spread.N_k >= 50) |
-        (spread.N_h >= 50) ) )
+spread = atpy.Table(dropbox_bo_spread+'full_data_errorcorrected_ce_spreadsheet.fits')
+spread_cleaned = atpy.Table(dropbox_bo_spread+'fdece_graded_clipped0.95_scrubbed0.1_dusted0.5_spread.fits')
 
-fulldata = atpy.Table('full_data_errorcorrected_ce.fits')
 
+fulldata = atpy.Table(dropbox_bo_data+'full_data_errorcorrected_ce.fits')
+fulldata_cleaned = atpy.Table(dropbox_bo_data+'fdece_graded_clipped0.95_scrubbed0.1_dusted0.5.fits')
 
 def filter_by_tile(photometry_data, spreadsheet):
     """
@@ -60,11 +58,11 @@ def filter_by_tile(photometry_data, spreadsheet):
 
         for dec_j in range(4):
 
-            tile_min_ra = min_ra + tile_size_ra*ra_i + tile_size_ra/10
-            tile_max_ra = min_ra + tile_size_ra*(ra_i+1) - tile_size_ra/10
+            tile_min_ra = min_ra + tile_size_ra*ra_i + tile_size_ra/12
+            tile_max_ra = min_ra + tile_size_ra*(ra_i+1) - tile_size_ra/12
 
-            tile_min_dec = min_dec + tile_size_dec*dec_j + tile_size_dec/10
-            tile_max_dec = min_dec + tile_size_dec*(dec_j+1) - tile_size_dec/10
+            tile_min_dec = min_dec + tile_size_dec*dec_j + tile_size_dec/12
+            tile_max_dec = min_dec + tile_size_dec*(dec_j+1) - tile_size_dec/12
 
             tile_photometry = vp.where(
                 (vp.RA > tile_min_ra) & (vp.RA < tile_max_ra) &
@@ -95,12 +93,17 @@ def check_max_observations_per_tile(*args):
 
 
 
-def f_observing_map():
+def f_observing_map(data_table=fulldata_cleaned, spreadsheet=spread_cleaned):
     """
     Makes a map of observations and how many J, H, K band datapoints
     each tile has.
 
     """
+
+    maxvars = spreadsheet.where( (spreadsheet.Stetson > 0.5) & (
+                                 (spreadsheet.N_j >= 50) |
+                                 (spreadsheet.N_k >= 50) |
+                                 (spreadsheet.N_h >= 50) ) )
 
     max_ra = maxvars.RA.max()
     min_ra = maxvars.RA.min()
@@ -110,7 +113,7 @@ def f_observing_map():
     tile_size_ra = (max_ra - min_ra) / 4
     tile_size_dec = (max_dec - min_dec) / 4
 
-    tile_spreadsheets = filter_by_tile(fulldata, maxvars)[1]
+    tile_spreadsheets = filter_by_tile(data_table, maxvars)[1]
 
     fig = plt.figure(figsize=(6,6))
 
