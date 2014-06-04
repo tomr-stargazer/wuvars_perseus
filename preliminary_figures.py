@@ -10,6 +10,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 import atpy
+import plot4
+from plot_perseus import NGC1333StarData as sdp
+from perseus_lightcurve_generator import photometry_data
+from subjective_judger import allvars_periods, eclipsing_binary_SOURCEIDs, pulsating_SOURCEIDs
 
 dropbox_bo_data = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/WSERV7/DATA/")
 dropbox_bo_spread = dropbox_bo_data+'spreadsheet/'
@@ -181,3 +185,21 @@ def f_observing_map(data_table=fulldata_cleaned, spreadsheet=spread_cleaned):
     plt.ylabel("Dec (deg)")
 
     return fig
+
+def multipanel_eclipsing_binaries():
+
+    EBs_allvars = allvars_periods.where(np.in1d(allvars_periods.SOURCEID, eclipsing_binary_SOURCEIDs))
+    EB_sdlist = [sdp(photometry_data, x, name='{0}: {1}'.format(y, x)) for x, y in zip(EBs_allvars.SOURCEID, EBs_allvars.final_ID)]
+
+    offsets = [0.41, 0.105, 0.1675, -0.3525, -0.305, 0.32, -0.135, -0.08, -0.3025]
+    fig = plot4.multi_lc_phase_colors(EB_sdlist, ['k']*9, EBs_allvars.best_period, figscale=0.5, offsets=offsets)
+
+    return fig
+
+def multipanel_pulsators():
+
+    pulsating_allvars = allvars_periods.where(np.in1d(allvars_periods.SOURCEID, pulsating_SOURCEIDs))
+    pulsating_sdlist = [sdp(photometry_data, x, name='{0}: {1}'.format(y, x)) for x, y in zip(pulsating_allvars.SOURCEID, pulsating_allvars.final_ID)]
+
+#    offsets = [0.41, 0.105, 0.1675, -0.3525, -0.305, 0.32, -0.135, -0.08, -0.3025]
+    plot4.multi_lc_phase_colors(pulsating_sdlist, ['k']*4, pulsating_allvars.best_period, figscale=0.5)#, offsets=offsets)    
