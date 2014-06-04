@@ -39,8 +39,8 @@ def output_tab_delineated_spreadsheet(spreadsheet, print_column_headers=False):
 	for (ra, dec) in zip(spreadsheet.RA, spreadsheet.DEC):
 		pp = coords.Position((ra, dec), units='rad')
 		ra_s, de_s = pp.hmsdms().split(' ')
-		RA_array.append(ra_s)
-		DEC_array.append(' '+de_s)
+		RA_array.append(ra_s[:-1])
+		DEC_array.append(' '+de_s[:-2])
 
 	for i in range(len(spreadsheet_matched)):
 
