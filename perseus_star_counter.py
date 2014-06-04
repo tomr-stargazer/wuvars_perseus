@@ -226,6 +226,7 @@ period_override = {
     44508746093223 : 4.155218 / 24, # pulsating stars
     44508746113922 : 13.702932 / 24,
     44508746121910 : 12.926229 / 24,
+    44508746105255 : 0.213672930845,
 }
 
 # assert that all the overrides are in maxvars!
@@ -338,4 +339,12 @@ eclipsing_binary_SOURCEIDs = [
     44508746128156]
 
 eclipsing_binaries = maxvars_periods.where(np.in1d(maxvars_periods.SOURCEID, eclipsing_binary_SOURCEIDs))
+
+pulsating_SOURCEIDs = [44508746093223,
+    44508746113922,
+    44508746121910,
+    44508746105255]
+
+pulsators = maxvars_periods.where(np.in1d(maxvars_periods.SOURCEID, pulsating_SOURCEIDs))
+
 
