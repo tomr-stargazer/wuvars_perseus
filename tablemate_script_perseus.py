@@ -42,6 +42,13 @@ WUVARS_allvars_t = TableParameters(
     radec_fmt = 'decimal-radians',
     name_col = 'temporary_ID')
 
+WUVARS_allvars_f = TableParameters(
+    data = dpath+"allvars_spread_with_final_IDs.fits",
+    alias= "WUVARS_2014_final",
+    full_name = "'Master spreadsheet for 160 final variables', from 'Near-Infrared Variables in NGC1333', Reipurth & Rice.",
+    ra_cols = ['RA'], dec_cols=['DEC'],
+    radec_fmt = 'decimal-radians',
+    name_col = 'final_ID')
 
 Twomass = TableParameters(
     data = dpath+"2MASS_PSC_boxsearch_1degree_NGC1333.tbl",
@@ -139,7 +146,7 @@ def test():
             
 
 
-def vars_match(primary_table=WUVARS_allvars_t):
+def vars_match(primary_table=WUVARS_allvars_f):
     """ 
     A function that matches our variables table to all the other tables!
 

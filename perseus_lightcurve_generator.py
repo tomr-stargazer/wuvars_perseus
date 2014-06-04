@@ -99,7 +99,7 @@ def generate_confirmed_lightcurves(test=False):
 
 	for spread, path in zip(periodic_spreadsheets, periodic_paths):
 
-		generate_periodic_lightcurves(spread, path, test=test, name_column='temporary_ID')
+		generate_periodic_lightcurves(spread, path, test=test, name_column='final_ID')
 
 	nonperiodic_spreadsheets = [q2_vars_nonpers, q1_vars_nonpers, q0_vars_nonpers]
 	nonperiodic_paths = ['q2/nonperiodic', 'q1/nonperiodic', 'q0/nonperiodic']
@@ -107,7 +107,7 @@ def generate_confirmed_lightcurves(test=False):
 
 	for spread, path in zip(nonperiodic_spreadsheets, nonperiodic_paths):
 
-		generate_nonperiodic_lightcurves(spread, path, test=test, name_column='temporary_ID')
+		generate_nonperiodic_lightcurves(spread, path, test=test, name_column='final_ID')
 
 	return None
 

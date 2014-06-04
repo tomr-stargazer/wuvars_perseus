@@ -7,6 +7,7 @@ from __future__ import division
 
 import numpy as np
 from perseus_star_counter import *
+from clonekiller import clone_hunterkiller
 
 # Copy/pasted from the google spreadsheet. Wish there were a better way to sync this.
 hi_subj_nonpers_comments = [
@@ -282,11 +283,25 @@ allvars = q2_variables.where(q2_variables.RA > 0)
 allvars.append(q1_variables)
 allvars.append(q0_variables)
 
-# append a 'temporary ID' column to allvars!
+# Systematically remove clones
+allvars = clone_hunterkiller(allvars)
+q2_variables = allvars.where(np.in1d(allvars.SOURCEID, q2_variables.SOURCEID))
+q1_variables = allvars.where(np.in1d(allvars.SOURCEID, q1_variables.SOURCEID))
+q0_variables = allvars.where(np.in1d(allvars.SOURCEID, q0_variables.SOURCEID))
+
+'''# append a 'temporary ID' column to allvars!
 temporary_ID_column = ['t{0}'.format(x+1) for x in range(len(allvars))] 
 
 allvars.sort('RA')
 allvars.add_column(name='temporary_ID', data=temporary_ID_column)
+'''
+
+# append a 'final ID' column to allvars!
+final_ID_column = ['f{0}'.format(x+1) for x in range(len(allvars))] 
+
+allvars.sort('RA')
+allvars.add_column(name='final_ID', data=final_ID_column)
+
 
 # Repeating much of the logic from before
 allvars_periodics = allvars.where( 
@@ -296,7 +311,10 @@ allvars_periods = maxvars_periods.where(
     np.in1d(maxvars_periods.SOURCEID, allvars_periodics.SOURCEID))
 
 assert (allvars_periods.RA == allvars_periodics.RA).all()
-allvars_periods.add_column(name='temporary_ID', data=allvars_periodics.temporary_ID)
+'''allvars_periods.add_column(name='temporary_ID', data=allvars_periodics.temporary_ID)
+'''
+
+allvars_periods.add_column(name='final_ID', data=allvars_periodics.final_ID)
 
 # Update the columns in these periodic guys
 q1_vars_periods = allvars_periods.where( 
@@ -323,6 +341,6 @@ q0_vars_nonpers = allvars.where(
 def save_allvars_to_file():
 
     dropbox_bo_aux = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/WSERV7/aux_catalogs/")
-    allvars.write(dropbox_bo_aux+"allvars_spread_with_temporary_IDs.fits")
+    allvars.write(dropbox_bo_aux+"allvars_spread_with_final_IDs.fits")
 
 
