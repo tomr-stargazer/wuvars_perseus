@@ -326,3 +326,16 @@ def save_maxvars_to_file():
     dropbox_bo_aux = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/WSERV7/aux_catalogs/")
     maxvars.write(dropbox_bo_aux+"maxvars_spread_with_preliminary_IDs.fits")
 
+eclipsing_binary_SOURCEIDs = [
+    44508746092968,
+    44508746095248,
+    44508746104931,
+    44508746111818,
+    44508746114638,
+    44508746120939,
+    44508746124658,
+    44508746127865,
+    44508746128156]
+
+eclipsing_binaries = maxvars_periods.where(np.in1d(maxvars_periods.SOURCEID, eclipsing_binary_SOURCEIDs))
+
