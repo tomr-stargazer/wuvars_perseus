@@ -34,7 +34,13 @@ def generate_periodic_lightcurves(spreadsheet, path, name_column='preliminary_ID
 	for sdx, period in zip(sdlist, spreadsheet.best_period):
 		fig = plot4.lc_and_phase_and_colors(sdx, period=period)
 		fig.ax_k_lc.set_xlim(0,250)
-		fig.ax_j_lc.set_title(sdx.name)
+		if sdx.sid in q2_variables.SOURCEID:
+			q_string = '2'
+		elif sdx.sid in q1_variables.SOURCEID:
+			q_string = '1'
+		else:
+			q_string = '0'
+		fig.ax_j_lc.set_title('{0}, Q={1}'.format(sdx.name, q_string))
 		fig.ax_khk.set_title("S = {0:.3}".format(sdx.Stetson()))
 
 		fig.canvas.draw()
@@ -55,7 +61,13 @@ def generate_nonperiodic_lightcurves(spreadsheet, path, name_column='preliminary
 	for sdx in sdlist:
 	    fig = plot4.basic_lc(sdx)
 	    fig.ax_k.set_xlim(0,250)
-	    fig.ax_j.set_title(sdx.name)
+	    if sdx.sid in q2_variables.SOURCEID:
+	    	q_string = '2'
+	    elif sdx.sid in q1_variables.SOURCEID:
+	    	q_string = '1'
+	    else:
+	    	q_string = '0'
+	    fig.ax_j.set_title('{0}, Q={1}'.format(sdx.name, q_string))
 	    fig.ax_khk.set_title("S = {0:.3}".format(sdx.Stetson()))
 
 	    fig.canvas.draw()
