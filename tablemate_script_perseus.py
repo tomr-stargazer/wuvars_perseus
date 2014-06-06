@@ -16,6 +16,7 @@ We are asking three broad questions:
 import os
 
 import numpy as np
+import astropy.table
 
 import tablemate_core
 from tablemate_core import TableParameters, atpy
@@ -137,6 +138,18 @@ Lada_1996 = TableParameters(
     name_col = '__LAL96_'
     )
 tables.append(Lada_1996)
+
+arnold_data = astropy.table.Table.read(dpath+'Arnold2012_table1.txt', format='ascii.tab', delimiter='\t')
+Arnold_2012 = TableParameters(
+    data = arnold_data,
+    alias = 'ARN12',
+    full_name = "'Basic Data' from 'A Spitzer IRS Survey of NGC 1333: Insights into Disk Evolution from a Very Young Cluster (Arnold+, 2012)'",
+    ra_cols = ['RAJ2000'], dec_cols = ['DEJ2000'],
+    radec_fmt = 'sex-three',
+    name_col = 'Index'
+    )
+tables.append(Arnold_2012)
+
     
 # Here's our first function, that we'll use just to get things rolling
 def test():
