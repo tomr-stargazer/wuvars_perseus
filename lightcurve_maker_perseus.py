@@ -66,6 +66,26 @@ def save_f89():
     custom_fivepanel_f89().savefig(dropbox_figure_output+"f89_lc.pdf", bbox_inches='tight')
 
 
+def dystopian_fivepanel_f89():
+    period = 14.4
+    stardata = NGC1333StarData(photometry_data, f89_id)
+
+    stardata.s_table['KPPERRBITS'] *= 0
+    stardata.s_table['HPPERRBITS'] *= 0
+
+    fig = eightpanel_f95()
+
+    fig2 = dystopian_HK_fivepanel(fig, stardata, period, offset=-0.3)
+    fig2.ax_k_lc.set_xlim(0,250)
+
+    fig2.ax_k_phase.set_xlim(-0.1, 1.1)
+
+    return fig2
+
+def save_dystopia():
+    dystopian_fivepanel_f89().savefig(dropbox_figure_output+"dys_f89_lc.pdf", bbox_inches='tight')
+
+
 def custom_HK_fivepanel(stardata, period=None, custom_xlabel=False, time_cmap='jet', offset=0):
     """
     Generates a custom eight-panel lightcurve: phase-folded, straight, and color info.
@@ -155,3 +175,92 @@ def custom_HK_fivepanel(stardata, period=None, custom_xlabel=False, time_cmap='j
     fig.ax_khk = ax_khk
 
     return fig
+
+
+def dystopian_HK_fivepanel(fig, stardata, period=None, custom_xlabel=False, time_cmap='jet', offset=0):
+    """
+    Takes an input figure and draws HK light curve ON TOP of that figure.
+
+    """
+
+    # kwargs defaulting over
+    # time_cmap = 'jet'
+    color_slope = False
+
+    colorscale='date'
+
+    stretch_factor = 1.575
+
+    bottom = 1.1
+    height = .25
+    left = 0.075 / stretch_factor
+    width = 0.5 / stretch_factor
+
+    ax_k_lc = fig.add_axes( (left+(left+width)-0.2, bottom, width, height) )
+    ax_h_lc = fig.add_axes( (left+(left+width)-0.2, bottom+.3, width, height), sharex=ax_k_lc )
+
+    ax_k_phase = fig.add_axes( (left+0.015, bottom, width/3, height) )
+    ax_h_phase = fig.add_axes( (left+0.015, bottom+.3, width/3, height), sharex=ax_k_phase )
+
+    color_height = 0.375
+    color_left = 0.65 / stretch_factor + (left+width)
+    color_width = 0.3 / stretch_factor
+
+    ax_khk = fig.add_axes( (color_left-0.2, bottom, color_width+0.07, height+0.3) )
+
+    d_ax_lc = {'h': ax_h_lc, 'k': ax_k_lc}
+    d_ax_phase = {'h': ax_h_phase, 'k': ax_k_phase}
+
+    d_cmap=time_cmap
+
+    if type(d_cmap) is str:
+        d_cmap = {'j': d_cmap, 'h': d_cmap, 'k': d_cmap}
+    elif type(d_cmap) is not dict:
+        d_cmap = {'j': d_cmap[0], 'h': d_cmap[1], 'k': d_cmap[2]}
+
+    color_vmin = stardata.min_date
+    color_vmax = stardata.max_date 
+
+    vmin = color_vmin
+    vmax = color_vmax
+
+    for band in ['h', 'k']:
+        lightcurve_axes_with_info(stardata, band, d_ax_lc[band], colorscale,
+                                  cmap=d_cmap[band], vmin=vmin, vmax=vmax)
+
+        phase_axes_with_info(stardata, band, period, d_ax_phase[band], colorscale,
+                                  cmap=d_cmap[band], vmin=vmin, vmax=vmax, offset=offset)
+
+    colormag_axes(stardata, 'khk', ax_khk, colorscale, cmap=time_cmap, vmin=vmin, vmax=vmax,
+                  color_slope=color_slope)
+
+    # Hide the bad labels...
+    plt.setp(ax_h_lc.get_xticklabels(), visible=False)
+    plt.setp(ax_h_phase.get_xticklabels(), visible=False)
+
+    # Label stuff
+    if custom_xlabel:
+        ax_k_lc.set_xlabel( custom_xlabel )
+    else:
+        ax_k_lc.set_xlabel( "Time (MJD - %.1f)" % stardata.date_offset )
+
+    ax_k_phase.set_xlabel("Phase (Period = {0:.4} days)".format(period))        
+
+    ax_h_phase.set_ylabel( "H",{'rotation':'horizontal', 'fontsize':'large'} )
+    ax_k_phase.set_ylabel( "K",{'rotation':'horizontal', 'fontsize':'large'} )
+
+    ax_h_lc.set_ylabel( "H",{'rotation':'horizontal', 'fontsize':'large'} )
+    ax_k_lc.set_ylabel( "K",{'rotation':'horizontal', 'fontsize':'large'} )
+
+    ax_khk.set_xlabel( "H-K" )
+    ax_khk.set_ylabel( "K", {'rotation':'horizontal'})
+
+    fig.ax_k_lc = ax_k_lc
+    fig.ax_h_lc = ax_h_lc
+
+    fig.ax_k_phase = ax_k_phase
+    fig.ax_h_phase = ax_h_phase
+
+    fig.ax_khk = ax_khk
+
+    return fig    
