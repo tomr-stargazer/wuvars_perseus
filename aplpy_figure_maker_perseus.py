@@ -36,9 +36,9 @@ def m42_map(xmarker_array=None, ymarker_array=None, rect=True, latex=True):
 
     """
 
-    fig = aplpy.FITSFigure(dropbox_bo_images+"slice.fits", north=True)
+    fig = aplpy.FITSFigure(big_image_path+"NGC1333_ha.fits", north=True)
 
-    fig.show_rgb(dropbox_bo_images+"eso1006a.jpg")
+    fig.show_rgb(big_image_path+"eso1006a.jpg")
 
     center_of_box_ra = np.degrees(maxvars.RA.min() +
                                   maxvars.RA.max())/2
