@@ -3,7 +3,7 @@ A script to generate some custom lightcurves for the NGC1333 paper using plot4.
 
 """
 
-from __future__ import division
+
 
 import os
 

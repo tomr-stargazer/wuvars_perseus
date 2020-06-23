@@ -6,7 +6,7 @@ It's a good way of quantifying the variability of previously-known young stars.
 
 """
 
-from __future__ import division
+
 
 import numpy as np
 import matplotlib.pyplot as plt

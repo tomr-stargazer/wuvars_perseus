@@ -8,7 +8,7 @@ time if you only want one.
 
 """
 
-from __future__ import division
+
 import os
 
 import numpy as np

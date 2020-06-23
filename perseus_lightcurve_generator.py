@@ -3,7 +3,7 @@ A script that makes lots of light curves.
 
 """
 
-from __future__ import division
+
 import os
 
 import matplotlib.pyplot as plt

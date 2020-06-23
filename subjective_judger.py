@@ -3,7 +3,7 @@ Judges the subjective stars.
 
 """
 
-from __future__ import division
+
 
 import numpy as np
 from perseus_star_counter import *

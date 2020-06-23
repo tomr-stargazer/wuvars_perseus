@@ -5,7 +5,7 @@ Gets around some issues in ATPY that are really riling me up.
 
 """
 
-from __future__ import division
+
 import os
 
 import numpy as np

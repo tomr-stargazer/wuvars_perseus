@@ -3,7 +3,7 @@ Extensions to wuvars-proto/tr/plot4.py that are relevant to NGC1333.
 
 """
 
-from __future__ import division
+
 
 from plot4 import StarData
 

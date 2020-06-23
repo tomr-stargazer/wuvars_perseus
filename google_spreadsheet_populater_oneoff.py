@@ -3,7 +3,7 @@ This is a oneoff script to facilitate our google spreadsheet thing.
 
 """
 
-from __future__ import division
+
 
 import numpy as np
 

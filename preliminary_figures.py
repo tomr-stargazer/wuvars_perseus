@@ -3,7 +3,7 @@ Some preliminary figures to make from the NGC1333 dataset.
 
 """
 
-from __future__ import division
+
 import os
 
 import numpy as np
@@ -87,13 +87,13 @@ def check_max_observations_per_tile(*args):
 
     tile_tables, tile_spreadsheets = filter_by_tile(*args)
 
-    for i, tile_spreadsheet in zip(range(len(tile_spreadsheets)), 
+    for i, tile_spreadsheet in zip(list(range(len(tile_spreadsheets))), 
                                    tile_spreadsheets):
 
         ts = tile_spreadsheet
         
-        print ("Tile %d, N_J: %3d, N_H: %3d, N_K: %3d" % 
-               (i, ts.N_j.max(), ts.N_h.max(), ts.N_k.max()))
+        print(("Tile %d, N_J: %3d, N_H: %3d, N_K: %3d" % 
+               (i, ts.N_j.max(), ts.N_h.max(), ts.N_k.max())))
 
 
 
@@ -127,7 +127,7 @@ def f_observing_map(data_table=fulldata_cleaned, spreadsheet=spread_cleaned):
                    'verticalalignment':'center'}
 
     # print the nice text and stuff
-    for k, ij, tile_spreadsheet in zip(range(len(tile_spreadsheets)),
+    for k, ij, tile_spreadsheet in zip(list(range(len(tile_spreadsheets))),
                                        ij_list, tile_spreadsheets):
 
         ra_i, dec_j = ij
@@ -152,7 +152,7 @@ def f_observing_map(data_table=fulldata_cleaned, spreadsheet=spread_cleaned):
     physical_tile_size_dec = (max_dec - min_dec) / 3.88
 
     # make the overlapping rectangles
-    for k, ij in zip(range(len(ij_list)), ij_list):
+    for k, ij in zip(list(range(len(ij_list))), ij_list):
 
         ra_i, dec_j = ij
 

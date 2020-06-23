@@ -18,7 +18,7 @@ Useful importable variable names:
 
 """ 
 
-from __future__ import division
+
 import os
 
 import numpy as np
@@ -29,7 +29,7 @@ import periodic_selector as ps
 
 def c_print(str):
     if __name__ == '__main__':
-        print str
+        print(str)
     else:
         pass
     return
@@ -230,7 +230,7 @@ period_override = {
 }
 
 # assert that all the overrides are in maxvars!
-for key in period_override.keys():
+for key in list(period_override.keys()):
     assert key in maxvars.SOURCEID
 
 periodics = ps.best_long_period(
