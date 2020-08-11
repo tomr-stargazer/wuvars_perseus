@@ -26,7 +26,7 @@ print("New feature: you can pass a number to calculate_stuff() and glue_stuff()"
 print("(such as 25, 50, 100) as a manual control on how many chunks to split")
 print("the data into. Make sure to use the same number for both functions!!")
 
-path = os.path.expanduser('~/Dropbox/Bo_Tom/NGC1333/WSERV7/DATA/')
+path = os.path.expanduser('~/Desktop/Bo_Tom/NGC1333/WSERV7/DATA/')
 path2= path+'spreadsheet/'
 
 #data = atpy.Table('{0}full_data_errorcorrected_ce.fits'.format(path))
@@ -38,7 +38,7 @@ data = atpy.Table('{0}low_maxvars_photometry_aboveStetson0.5_fdece_gc0.95_s0.1_d
 #data = atpy.Table('/home/tom/reu/ORION/DATA/constantstars_073112_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/full_data_errorcorrected.fits')
 #data = atpy.Table('/home/tom/reu/ORION/DATA/s3_photometric_errorcorrected.fits')
-print("old data size is ", data.shape)
+print(("old data size is ", data.shape))
 
 # First, let's select a certain part of the data, to trim it down.
 # This cuts the data size in half!
@@ -103,7 +103,7 @@ def calculate_stuff( splits = 10, start=0 ):
                                              "%Y-%m-%d %H:%M:%S")
         except:
             now = 'sometime'
-        print("finished chunk %d at %s" % (i, now))
+        print(("finished chunk %d at %s" % (i, now)))
                                            
 
 

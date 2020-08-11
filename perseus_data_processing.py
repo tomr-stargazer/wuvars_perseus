@@ -14,7 +14,7 @@ import astropy.io.fits
 
 import night_cleanser
 
-path = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/WSERV7/")
+path = os.path.expanduser("~/Desktop/Bo_Tom/NGC1333/WSERV7/")
 datapath = path+'DATA/'
 
 # This is a gross workaround because either WSA or ATpy is not handling fits files correctly.

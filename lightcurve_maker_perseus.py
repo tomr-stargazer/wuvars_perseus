@@ -15,8 +15,8 @@ from plot4 import lc_and_phase_and_colors, multi_lc_phase_colors, multi_lc_color
 from plot_perseus import NGC1333StarData
 
 
-dropbox_figure_output = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/")
-dropbox_bo_data = os.path.expanduser("~/Dropbox/Bo_Tom/NGC1333/WSERV7/DATA/")
+dropbox_figure_output = os.path.expanduser("~/Desktop/Bo_Tom/NGC1333/")
+dropbox_bo_data = os.path.expanduser("~/Desktop/Bo_Tom/NGC1333/WSERV7/DATA/")
 photometry_data = atpy.Table('{0}low_maxvars_photometry_aboveStetson0.5_fdece_gc0.95_s0.1_d0.5.fits'.format(dropbox_bo_data))
 
 
