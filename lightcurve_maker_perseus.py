@@ -31,8 +31,8 @@ f89_id = 44508746118971
 f95_id = 44508746116800
 
 
-def eightpanel_f95(**kwargs):
-    period = 26.42
+def eightpanel_f95(period=26.42, **kwargs):
+    # period = 26.42
     stardata = NGC1333StarData(photometry_data, f95_id)
 
     fig = lc_and_phase_and_colors(stardata, period, offset=0.32, **kwargs)
